@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rise Events Photography</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <div class="sidebar" id="sidebar">
+        <div class="logo">Rise Events</div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#showcase">Showcase</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </div>
+
+    <div class="menu-toggle" id="menu-toggle">
+        <i class="fas fa-bars"></i>
+    </div>
+
+    <!-- Hero Section -->
+<section class="hero" id="home">
+    <div class="hero-container">
+        <!-- Video Section -->
+        <div class="hero-video">
+            <video autoplay muted loop id="video-hero">
+                <source src="images/hero.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        
+        <!-- Slideshow Section -->
+        <div class="hero-slideshow">
+            <div class="slide active">
+                <img src="images/hero1.jpg" alt="Hero Image 1">
+                <div class="slide-content">
+                    <h1 data-aos="fade-up">Rise Events Photography</h1>
+                    <p data-aos="fade-up" data-aos-delay="200">Capturing your most precious moments with cinematic precision</p>
+                </div>
+            </div>
+            <div class="slide">
+                <img src="images/hero2.jpg" alt="Hero Image 2">
+                <div class="slide-content">
+                    <h1 data-aos="fade-up">Wedding Excellence</h1>
+                    <p data-aos="fade-up" data-aos-delay="200">Creating timeless memories of your special day</p>
+                </div>
+            </div>
+            <div class="slide">
+                <img src="images/hero3.jpg" alt="Hero Image 3">
+                <div class="slide-content">
+                    <h1 data-aos="fade-up">Event Magic</h1>
+                    <p data-aos="fade-up" data-aos-delay="200">Transforming celebrations into cherished moments</p>
+                </div>
+            </div>
+            <div class="slide">
+                <img src="images/hero4.jpg" alt="Hero Image 4">
+                <div class="slide-content">
+                    <h1 data-aos="fade-up">Cultural Heritage</h1>
+                    <p data-aos="fade-up" data-aos-delay="200">Preserving traditions through visual storytelling</p>
+                </div>
+            </div>
+            
+            <!-- Navigation Dots -->
+            <div class="slide-dots">
+                <span class="dot active" data-slide="0"></span>
+                <span class="dot" data-slide="1"></span>
+                <span class="dot" data-slide="2"></span>
+                <span class="dot" data-slide="3"></span>
+            </div>
+        </div>
+    </div>
+</section>
+
+    <!-- Showcase Section -->
+    <section class="showcase" id="showcase">
+        <h2 class="section-title" data-aos="fade-up">Our Showcase</h2>
+        <div class="gallery">
+            <!-- Wedding Images -->
+            <div class="gallery-item" data-aos="zoom-in" data-aos-delay="100">
+                <img src="images/lan1.jpg" alt="Wedding Photography">
+                <div class="gallery-caption">
+                    <h3>Wedding Magic</h3>
+                    <p>Capturing the perfect union</p>
+                </div>
+            </div>
+            <div class="gallery-item" data-aos="zoom-in" data-aos-delay="200">
+                <img src="images/lan2.jpg" alt="Wedding Photography">
+                <div class="gallery-caption">
+                    <h3>Eternal Vows</h3>
+                    <p>Preserving love's first dance</p>
+                </div>
+            </div>
+
+            <!-- Party Images -->
+            <div class="gallery-item" data-aos="zoom-in" data-aos-delay="300">
+                <img src="images/lan3.jpg" alt="Party Photography">
+                <div class="gallery-caption">
+                    <h3>Celebration Vibes</h3>
+                    <p>Freezing the party atmosphere</p>
+                </div>
+            </div>
+            <div class="gallery-item" data-aos="zoom-in" data-aos-delay="400">
+                <img src="images/lan7.jpg" alt="Party Photography">
+                <div class="gallery-caption">
+                    <h3>Festive Moments</h3>
+                    <p>Capturing joy in motion</p>
+                </div>
+            </div>
+
+            <!-- Cultural Events -->
+            <div class="gallery-item" data-aos="zoom-in" data-aos-delay="500">
+                <img src="images/lan6.jpg" alt="Cultural Event Photography">
+                <div class="gallery-caption">
+                    <h3>Cultural Heritage</h3>
+                    <p>Honoring traditions through lens</p>
+                </div>
+            </div>
+            <div class="gallery-item" data-aos="zoom-in" data-aos-delay="600">
+                <img src="images/lan4.jpg" alt="Cultural Event Photography">
+                <div class="gallery-caption">
+                    <h3>Tradition Alive</h3>
+                    <p>Preserving cultural narratives</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services" id="services">
+        <h2 class="section-title" data-aos="fade-up">Our Services</h2>
+        <div class="service-cards">
+            <div class="service-card" data-aos="flip-up">
+                <div class="service-icon">
+                    <i class="fas fa-camera"></i>
+                </div>
+                <h3>Wedding Photography</h3>
+                <p>Cinematic storytelling of your special day with artistic compositions and emotional moments.</p>
+            </div>
+            <div class="service-card" data-aos="flip-up" data-aos-delay="200">
+                <div class="service-icon">
+                    <i class="fas fa-video"></i>
+                </div>
+                <h3>Event Videography</h3>
+                <p>Professional video production capturing all the highlights of your celebration.</p>
+            </div>
+            <div class="service-card" data-aos="flip-up" data-aos-delay="400">
+                <div class="service-icon">
+                    <i class="fas fa-microphone"></i>
+                </div>
+                <h3>Cultural Documentation</h3>
+                <p>Preserving cultural heritage through thoughtful documentation of traditional events.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+<section class="contact" id="contact">
+    <h2 class="section-title" data-aos="fade-up">Get In Touch</h2>
+    
+    <div class="contact-info" data-aos="fade-up" data-aos-delay="200">
+        <div class="contact-details">
+            <div class="detail">
+                <i class="fas fa-phone"></i>
+                <span>081 337 8767</span>
+            </div>
+            <div class="detail">
+                <i class="fas fa-envelope"></i>
+                <span>bookings@riseeventsphotos.co.za</span>
+            </div>
+            
+            <div class="logo-container" data-aos="zoom-in" data-aos-delay="300">
+                <img src="images/logo.png" alt="Rise Events Photography Logo" class="contact-logo">
+            </div>
+        </div>
+        
+        <div class="map">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d101703.41210540134!2d28.312499784959716!3d-25.710426439146957!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1e9559c0397b4b05%3A0x57a9adc3f0cfd01!2sRise%20Events%20Photography!5e1!3m2!1sen!2sza!4v1743338490179!5m2!1sen!2sza" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+    </div>
+</section>
+    
+
+    <!-- Footer -->
+    <footer>
+        <div class="social-links">
+            <a href="https://www.instagram.com/riseevents?utm_source=qr&igsh=dzM4NTdodzZtaDZ0"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.facebook.com/RiseEventsPhotography?rdid=Kt4X90j9mPlGJ2ec&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F16D2CJYLkm%2F#"><i class="fab fa-facebook"></i></a>
+            <a href="https://www.linkedin.com/company/rise-events-photography/posts/?feedView=all"><i class="fab fa-linkedin"></i></a>
+            <a href="https://wa.me/27813378767"><i class="fab fa-whatsapp"></i></a>
+        </div>
+        <p>&copy; 2023 Rise Events Photography. All rights reserved | By <a href="https://www.valoyitech.co.za" target="_blank">Hector Baloyi</a></p>
+    </footer>
+
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
