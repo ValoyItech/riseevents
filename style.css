@@ -537,3 +537,26 @@ footer a:hover {
     height: 24px;
     margin-right: 8px;
 }
+
+/* Services Section */
+.services {
+    padding: 5rem 2rem;
+    background-image: url('images/bg.png'); /* Path to your bg.png */
+    background-size: cover; /* Ensures the image covers the entire section */
+    background-position: center; /* Centers the image */
+    background-repeat: no-repeat; /* Prevents the image from repeating */
+    background-attachment: fixed; /* Keeps the background fixed while scrolling */
+    position: relative; /* Ensures the overlay works correctly */
+}
+
+/* Add an overlay if needed for better text readability */
+.services::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+    z-index: -1; /* Places the overlay behind the content */
+}
