@@ -26,249 +26,994 @@
     
     <!-- Favicon -->
     <link rel="icon" href="images/logo.png" type="image/png">
-
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-</head>
-<body>
     
-    <!-- Sidebar Navigation -->
-    <div class="sidebar" id="sidebar">
-        <div class="logo">Rise Events</div>
-        <ul class="nav-links">
-            <li><a href="#home">Home</a></li>
-            <li><a href="#showcase">Showcase</a></li>
-            <li><a href="#services">Services</a></li>
-            <li><a href="#contact">Contact</a></li>
-        </ul>
-    </div>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .font-playfair { font-family: 'Playfair Display', serif; }
+        .font-inter { font-family: 'Inter', sans-serif; }
+        
+        /* Prevent horizontal scroll */
+        html, body {
+            overflow-x: hidden;
+        }
+        
+        /* Loading Animation */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1f2937, #111827);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease-out;
+        }
+        
+        .camera-icon {
+            width: 80px;
+            height: 80px;
+            border: 4px solid #f59e0b;
+            border-radius: 12px;
+            position: relative;
+            animation: pulse 2s infinite;
+        }
+        
+        .camera-icon::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            border: 3px solid #f59e0b;
+            border-radius: 50%;
+            animation: zoom 1.5s infinite alternate;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        @keyframes zoom {
+            0% { transform: translate(-50%, -50%) scale(1); }
+            100% { transform: translate(-50%, -50%) scale(1.2); }
+        }
+        
+        /* Hero Slideshow Styles */
+        .hero-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+        }
+        
+        .hero-slide.active {
+            opacity: 1;
+        }
+        
+        .hero-content-slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+.hero-content-slide.active {
+    opacity: 1;
+}
 
-    <div class="menu-toggle" id="menu-toggle">
-        <i class="fas fa-bars"></i>
+        
+        .slide-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 2px solid rgba(245, 158, 11, 0.5);
+            background: transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .slide-indicator.active {
+            background: #f59e0b;
+            border-color: #f59e0b;
+        }
+        
+        /* Enhanced Scroll Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .slide-up {
+            opacity: 0;
+            transform: translateY(60px);
+            animation: slideUp 1s ease-out forwards;
+        }
+        
+        .slide-left {
+            opacity: 0;
+            transform: translateX(-60px);
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        .slide-left.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .slide-right {
+            opacity: 0;
+            transform: translateX(60px);
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        .slide-right.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .scale-in {
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        .scale-in.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .rotate-in {
+            opacity: 0;
+            transform: rotate(-10deg) scale(0.9);
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        .rotate-in.visible {
+            opacity: 1;
+            transform: rotate(0deg) scale(1);
+        }
+        
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Stagger Animation */
+        .stagger-1 { animation-delay: 0.1s; }
+        .stagger-2 { animation-delay: 0.2s; }
+        .stagger-3 { animation-delay: 0.3s; }
+        .stagger-4 { animation-delay: 0.4s; }
+        .stagger-5 { animation-delay: 0.5s; }
+        .stagger-6 { animation-delay: 0.6s; }
+        
+        /* Hover effects */
+        .hover-lift {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        
+        /* Parallax effect */
+        .parallax {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        
+        /* Floating animation */
+        .float {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        /* Gradient text */
+        .gradient-text {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #1f2937;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #f59e0b;
+            border-radius: 4px;
+        }
+        
+        /* Image overlay effect */
+        .image-overlay {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .image-overlay::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(245, 158, 11, 0.8), rgba(217, 119, 6, 0.8));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+        
+        .image-overlay:hover::before {
+            opacity: 1;
+        }
+        
+        .image-overlay .overlay-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 2;
+        }
+        
+        .image-overlay:hover .overlay-content {
+            opacity: 1;
+        }
+
+        /* Default = desktop (1920x1080) */
+.hero-slide-1 { background-image: url('images/hero1.jpg'); }
+.hero-slide-2 { background-image: url('images/hero2.jpg'); }
+.hero-slide-3 { background-image: url('images/hero3.jpg'); }
+.hero-slide-4 { background-image: url('images/hero4.jpg'); }
+
+/* Mobile override (1080x1920) */
+@media (max-width: 768px) {
+  .hero-slide-1 { background-image: url('images/hero1m.jpg'); }
+  .hero-slide-2 { background-image: url('images/hero2m.jpg'); }
+  .hero-slide-3 { background-image: url('images/hero3m.jpg'); }
+  .hero-slide-4 { background-image: url('images/hero4m.jpg'); }
+}
+
+    </style>
+</head>
+<body class="bg-gray-900 text-white font-inter">
+    <!-- Loading Screen -->
+    <div id="loader" class="loader">
+    <div class="text-center">
+        <img src="images/logo.png" alt="Rise Events Photography" class="camera-icon mx-auto mb-4">
+        <div class="text-amber-500 text-xl font-playfair">Rise Events Photography</div>
+        <div class="text-gray-400 text-sm mt-2">Loading your visual journey...</div>
+    </div>
+</div>
+
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-gray-900/95 backdrop-blur-sm z-50 transition-all duration-300" id="navbar">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <div class="text-2xl font-playfair font-bold gradient-text">Rise Events Photography</div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#home" class="hover:text-amber-500 transition-colors">Home</a>
+                    <a href="#services" class="hover:text-amber-500 transition-colors">Services</a>
+                    <a href="#portfolio" class="hover:text-amber-500 transition-colors">Portfolio</a>
+                    <a href="#about" class="hover:text-amber-500 transition-colors">About</a>
+                    <a href="gallery.html" class="hover:text-amber-500 transition-colors">Gallery</a>
+                    <a href="#contact" class="hover:text-amber-500 transition-colors">Contact</a>
+                </div>
+                <button class="md:hidden text-amber-500 z-60" onclick="toggleMenu()" id="menuToggle">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" id="menuIcon">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Sidebar Menu -->
+    <div id="mobileMenu" class="fixed inset-0 z-50 transform translate-x-full transition-transform duration-300 ease-in-out md:hidden">
+        <div class="absolute inset-0 bg-black bg-opacity-50" onclick="toggleMenu()"></div>
+        <div class="absolute right-0 top-0 h-full w-80 bg-gray-900 shadow-xl">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-8">
+                    <div class="text-xl font-playfair font-bold gradient-text">Menu</div>
+                    <button onclick="toggleMenu()" class="text-amber-500">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <nav class="space-y-6">
+                    <a href="#home" onclick="toggleMenu()" class="block text-lg text-white hover:text-amber-500 transition-colors py-3 border-b border-gray-700">
+                        <i class="fas fa-home mr-3"></i>Home
+                    </a>
+                    <a href="#services" onclick="toggleMenu()" class="block text-lg text-white hover:text-amber-500 transition-colors py-3 border-b border-gray-700">
+                        <i class="fas fa-camera mr-3"></i>Services
+                    </a>
+                    <a href="#portfolio" onclick="toggleMenu()" class="block text-lg text-white hover:text-amber-500 transition-colors py-3 border-b border-gray-700">
+                        <i class="fas fa-images mr-3"></i>Portfolio
+                    </a>
+                    <a href="#about" onclick="toggleMenu()" class="block text-lg text-white hover:text-amber-500 transition-colors py-3 border-b border-gray-700">
+                        <i class="fas fa-info-circle mr-3"></i>About
+                    </a>
+                   <a href="gallery.html" onclick="toggleMenu()" class="block text-lg text-white hover:text-amber-500 transition-colors py-3 border-b border-gray-700">
+    <i class="fas fa-images mr-3"></i>Gallery
+</a>
+
+                    <a href="#contact" onclick="toggleMenu()" class="block text-lg text-white hover:text-amber-500 transition-colors py-3 border-b border-gray-700">
+                        <i class="fas fa-envelope mr-3"></i>Contact
+                    </a>
+                </nav>
+                <div class="mt-8 pt-6 border-t border-gray-700">
+                    <div class="text-sm text-gray-400 mb-4">Contact Us</div>
+                    <div class="space-y-3">
+                        <a href="tel:0813378767" class="flex items-center text-gray-300 hover:text-amber-500 transition-colors">
+                            <i class="fas fa-phone mr-3"></i>081 337 8767
+                        </a>
+                        <a href="mailto:bookings@riseeventsphotos.co.za" class="flex items-center text-gray-300 hover:text-amber-500 transition-colors">
+                            <i class="fas fa-envelope mr-3"></i>Email Us
+                        </a>
+                        <a href="https://wa.me/27813378767" class="flex items-center text-gray-300 hover:text-amber-500 transition-colors">
+                            <i class="fab fa-whatsapp mr-3"></i>WhatsApp
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Hero Section -->
-<section class="hero" id="home">
-    <div class="hero-container">
-        <!-- Video Section -->
-        <div class="hero-video">
-            <video autoplay muted loop id="video-hero">
-                <source src="images/hero.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
-        </div>
-        
-        <!-- Slideshow Section -->
-        <div class="hero-slideshow">
-            <div class="slide active">
-                <img src="images/hero1.jpg" alt="Hero Image 1">
-                <div class="slide-content">
-                    <h1 data-aos="fade-up">Rise Events Photography</h1>
-                    <p data-aos="fade-up" data-aos-delay="200">Capturing your most precious moments with cinematic precision</p>
+<section id="home" class="min-h-screen flex items-center justify-center relative overflow-hidden">
+    <!-- Background Image Slideshow -->
+    <div class="absolute inset-0">
+        <div class="hero-slide hero-slide-1 active"></div>
+        <div class="hero-slide hero-slide-2"></div>
+        <div class="hero-slide hero-slide-3"></div>
+        <div class="hero-slide hero-slide-4"></div>
+    </div>
+    <div class="absolute inset-0 bg-black bg-opacity-60"></div>
+    <div class="absolute inset-0 bg-gradient-to-r from-amber-500/20 to-orange-600/20"></div>
+    
+    <!-- Hero Content -->
+    <div class="container mx-auto px-6 text-center relative z-10">
+        <!-- Main Title -->
+        <div class="fade-in mb-8">
+            <h1 class="text-5xl md:text-7xl font-playfair font-bold mb-6 gradient-text slide-up">
+                Capturing Your
+                <span class="block">Special Moments</span>
+            </h1>
+
+            <!-- Rotating Description Text -->
+            <div class="relative min-h-[120px] mb-8">
+                <div class="hero-content-slide active">
+                    <p class="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto text-center">
+                        Professional wedding photography and videography capturing your love story with cinematic elegance across all provinces
+                    </p>
                 </div>
-            </div>
-            <div class="slide">
-                <img src="images/lan2.jpg" alt="Hero Image 2">
-                <div class="slide-content">
-                    <h1 data-aos="fade-up">Wedding Excellence</h1>
-                    <p data-aos="fade-up" data-aos-delay="200">Creating timeless memories of your special day</p>
+                
+                <div class="hero-content-slide">
+                    <p class="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto text-center">
+                        Vibrant party and celebration documentation bringing energy and joy to life through stunning visual storytelling
+                    </p>
                 </div>
-            </div>
-            <div class="slide">
-                <img src="images/hero3.jpg" alt="Hero Image 3">
-                <div class="slide-content">
-                    <h1 data-aos="fade-up">Event Magic</h1>
-                    <p data-aos="fade-up" data-aos-delay="200">Transforming celebrations into cherished moments</p>
+                
+                <div class="hero-content-slide">
+                    <p class="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto text-center">
+                        Corporate events and professional photography showcasing your business excellence with sophisticated imagery
+                    </p>
                 </div>
-            </div>
-            <div class="slide">
-                <img src="images/hero4.jpg" alt="Hero Image 4">
-                <div class="slide-content">
-                    <h1 data-aos="fade-up">Cultural Heritage</h1>
-                    <p data-aos="fade-up" data-aos-delay="200">Preserving traditions through visual storytelling</p>
+                
+                <div class="hero-content-slide">
+                    <p class="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto text-center">
+                        Creative design and cultural documentation preserving heritage and artistic vision with professional excellence
+                    </p>
                 </div>
-            </div>
-            
-            <!-- Navigation Dots -->
-            <div class="slide-dots">
-                <span class="dot active" data-slide="0"></span>
-                <span class="dot" data-slide="1"></span>
-                <span class="dot" data-slide="2"></span>
-                <span class="dot" data-slide="3"></span>
             </div>
         </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-col sm:flex-row gap-4 justify-center slide-up" style="animation-delay: 0.6s;">
+            <button onclick="scrollToSection('contact')" class="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300 hover-lift">
+                Book Your Event
+            </button>
+            <button onclick="scrollToSection('portfolio')" class="border-2 border-amber-500 hover:bg-amber-500 hover:text-gray-900 px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300">
+                View Portfolio
+            </button>
+        </div>
+    </div>
+
+    <!-- Slide Indicators -->
+    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-3 z-20">
+        <button class="slide-indicator active" onclick="goToSlide(0)"></button>
+        <button class="slide-indicator" onclick="goToSlide(1)"></button>
+        <button class="slide-indicator" onclick="goToSlide(2)"></button>
+        <button class="slide-indicator" onclick="goToSlide(3)"></button>
     </div>
 </section>
 
-    <!-- Showcase Section -->
-    <section class="showcase" id="showcase">
-        <h2 class="section-title" data-aos="fade-up">Our Showcase</h2>
-        <div class="gallery">
-            <!-- Wedding Images -->
-            <div class="gallery-item" data-aos="zoom-in" data-aos-delay="100">
-                <img src="images/lan1.jpg" alt="Wedding Photography">
-                <div class="gallery-caption">
-                    <h3>Wedding Magic</h3>
-                    <p>Capturing the perfect union</p>
-                </div>
-            </div>
-            <div class="gallery-item" data-aos="zoom-in" data-aos-delay="200">
-                <img src="images/lan2.jpg" alt="Wedding Photography">
-                <div class="gallery-caption">
-                    <h3>Eternal Vows</h3>
-                    <p>Preserving love's first dance</p>
-                </div>
-            </div>
 
-            <!-- Party Images -->
-            <div class="gallery-item" data-aos="zoom-in" data-aos-delay="300">
-                <img src="images/lan3.jpg" alt="Party Photography">
-                <div class="gallery-caption">
-                    <h3>Celebration Vibes</h3>
-                    <p>Freezing the party atmosphere</p>
-                </div>
+    <!-- Services Section -->
+    <section id="services" class="py-20 bg-gray-800">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16 fade-in">
+                <h2 class="text-4xl md:text-5xl font-playfair font-bold mb-6 gradient-text">Our Services</h2>
+                <p class="text-xl text-gray-300 max-w-2xl mx-auto">
+                    From intimate gatherings to grand celebrations, we capture every precious moment with artistic excellence
+                </p>
             </div>
-            <div class="gallery-item" data-aos="zoom-in" data-aos-delay="400">
-                <img src="images/lan7.jpg" alt="Party Photography">
-                <div class="gallery-caption">
-                    <h3>Festive Moments</h3>
-                    <p>Capturing joy in motion</p>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-gray-900 rounded-xl p-8 hover-lift scale-in stagger-1">
+                    <div class="text-4xl mb-4 text-amber-500"><i class="fas fa-camera"></i></div>
+                    <h3 class="text-xl font-playfair font-bold mb-4 text-amber-500">Wedding Photography</h3>
+                    <p class="text-gray-300">Cinematic storytelling of your special day with artistic compositions and emotional moments.</p>
                 </div>
-            </div>
-
-            <!-- Cultural Events -->
-            <div class="gallery-item" data-aos="zoom-in" data-aos-delay="500">
-                <img src="images/lan6.jpg" alt="Cultural Event Photography">
-                <div class="gallery-caption">
-                    <h3>Cultural Heritage</h3>
-                    <p>Honoring traditions through lens</p>
+                
+                <div class="bg-gray-900 rounded-xl p-8 hover-lift scale-in stagger-2">
+                    <div class="text-4xl mb-4 text-amber-500"><i class="fas fa-video"></i></div>
+                    <h3 class="text-xl font-playfair font-bold mb-4 text-amber-500">Event Videography</h3>
+                    <p class="text-gray-300">Professional video production capturing all the highlights of your celebration.</p>
                 </div>
-            </div>
-            <div class="gallery-item" data-aos="zoom-in" data-aos-delay="600">
-                <img src="images/lan4.jpg" alt="Cultural Event Photography">
-                <div class="gallery-caption">
-                    <h3>Tradition Alive</h3>
-                    <p>Preserving cultural narratives</p>
+                
+                <div class="bg-gray-900 rounded-xl p-8 hover-lift scale-in stagger-3">
+                    <div class="text-4xl mb-4 text-amber-500"><i class="fas fa-globe-africa"></i></div>
+                    <h3 class="text-xl font-playfair font-bold mb-4 text-amber-500">Cultural Documentation</h3>
+                    <p class="text-gray-300">Preserving cultural heritage through thoughtful documentation of traditional events.</p>
+                </div>
+                
+                <div class="bg-gray-900 rounded-xl p-8 hover-lift scale-in stagger-4">
+                    <div class="text-4xl mb-4 text-amber-500"><i class="fas fa-helicopter"></i></div>
+                    <h3 class="text-xl font-playfair font-bold mb-4 text-amber-500">Aerial Photography</h3>
+                    <p class="text-gray-300">Capturing breathtaking aerial views with high-quality drone photography.</p>
+                </div>
+                
+                <div class="bg-gray-900 rounded-xl p-8 hover-lift scale-in stagger-5">
+                    <div class="text-4xl mb-4 text-amber-500"><i class="fas fa-briefcase"></i></div>
+                    <h3 class="text-xl font-playfair font-bold mb-4 text-amber-500">Commercial Photography</h3>
+                    <p class="text-gray-300">Professional photography for businesses, showcasing your products or services in the best light.</p>
+                </div>
+                
+                <div class="bg-gray-900 rounded-xl p-8 hover-lift scale-in stagger-6">
+                    <div class="text-4xl mb-4 text-amber-500"><i class="fas fa-users"></i></div>
+                    <h3 class="text-xl font-playfair font-bold mb-4 text-amber-500">Corporate Photography</h3>
+                    <p class="text-gray-300">Portraits, team photos, and corporate events captured with professionalism and attention to detail.</p>
+                </div>
+                
+                <div class="bg-gray-900 rounded-xl p-8 hover-lift scale-in stagger-1">
+                    <div class="text-4xl mb-4 text-amber-500"><i class="fas fa-microphone"></i></div>
+                    <h3 class="text-xl font-playfair font-bold mb-4 text-amber-500">Podcast</h3>
+                    <p class="text-gray-300">High-quality podcast production, from recording to editing, to help share your voice with the world.</p>
+                </div>
+                
+                <div class="bg-gray-900 rounded-xl p-8 hover-lift scale-in stagger-2">
+                    <div class="text-4xl mb-4 text-amber-500"><i class="fas fa-palette"></i></div>
+                    <h3 class="text-xl font-playfair font-bold mb-4 text-amber-500">Graphic Design</h3>
+                    <p class="text-gray-300">Creative design solutions for your branding, advertising, and marketing needs.</p>
+                </div>
+                
+                <div class="bg-gray-900 rounded-xl p-8 hover-lift scale-in stagger-3">
+                    <div class="text-4xl mb-4 text-amber-500"><i class="fas fa-paint-brush"></i></div>
+                    <h3 class="text-xl font-playfair font-bold mb-4 text-amber-500">Decorative</h3>
+                    <p class="text-gray-300">Custom decorative services, including event design, interior styling, and more.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Services Section -->
-    <section class="services" id="services">
-    <h2 class="section-title" data-aos="fade-up">Our Services</h2>
-    <div class="service-cards">
-        <div class="service-card" data-aos="flip-up">
-            <div class="service-icon">
-                <i class="fas fa-camera"></i>
-            </div>
-            <h3>Wedding Photography</h3>
-            <p>Cinematic storytelling of your special day with artistic compositions and emotional moments.</p>
-        </div>
-        <div class="service-card" data-aos="flip-up" data-aos-delay="200">
-            <div class="service-icon">
-                <i class="fas fa-video"></i>
-            </div>
-            <h3>Event Videography</h3>
-            <p>Professional video production capturing all the highlights of your celebration.</p>
-        </div>
-        <div class="service-card" data-aos="flip-up" data-aos-delay="400">
-            <div class="service-icon">
-                <i class="fas fa-microphone"></i>
-            </div>
-            <h3>Cultural Documentation</h3>
-            <p>Preserving cultural heritage through thoughtful documentation of traditional events.</p>
-        </div>
-        <!-- New services added below -->
-        <div class="service-card" data-aos="flip-up" data-aos-delay="600">
-            <div class="service-icon">
-                <i class="fas fa-camera-retro"></i>
-            </div>
-            <h3>Aerial Photography</h3>
-            <p>Capturing breathtaking aerial views with high-quality drone photography.</p>
-        </div>
-        <div class="service-card" data-aos="flip-up" data-aos-delay="800">
-            <div class="service-icon">
-                <i class="fas fa-camera"></i>
-            </div>
-            <h3>Commercial Photography</h3>
-            <p>Professional photography for businesses, showcasing your products or services in the best light.</p>
-        </div>
-        <div class="service-card" data-aos="flip-up" data-aos-delay="1000">
-            <div class="service-icon">
-                <i class="fas fa-briefcase"></i>
-            </div>
-            <h3>Corporate Photography</h3>
-            <p>Portraits, team photos, and corporate events captured with professionalism and attention to detail.</p>
-        </div>
-        <div class="service-card" data-aos="flip-up" data-aos-delay="1200">
-            <div class="service-icon">
-                <i class="fas fa-podcast"></i>
-            </div>
-            <h3>Podcast</h3>
-            <p>High-quality podcast production, from recording to editing, to help share your voice with the world.</p>
-        </div>
-        <div class="service-card" data-aos="flip-up" data-aos-delay="1400">
-            <div class="service-icon">
-                <i class="fas fa-paint-brush"></i>
-            </div>
-            <h3>Graphic Design</h3>
-            <p>Creative design solutions for your branding, advertising, and marketing needs.</p>
-        </div>
-        <div class="service-card" data-aos="flip-up" data-aos-delay="1600">
-            <div class="service-icon">
-                <i class="fas fa-cogs"></i>
-            </div>
-            <h3>Decorative</h3>
-            <p>Custom decorative services, including event design, interior styling, and more.</p>
-        </div>
-    </div>
-</section>
-
-
-    <!-- Contact Section -->
-<section class="contact" id="contact">
-    <h2 class="section-title" data-aos="fade-up">Get In Touch</h2>
-    
-    <div class="contact-info" data-aos="fade-up" data-aos-delay="200">
-        <div class="contact-details">
-            <div class="detail">
-                <i class="fas fa-phone"></i>
-                <span>081 337 8767</span>
-            </div>
-            <div class="detail">
-                <i class="fas fa-envelope"></i>
-                <span>bookings@riseeventsphotos.co.za</span>
-            </div>
-            
-            <div class="logo-container" data-aos="zoom-in" data-aos-delay="300">
-                <img src="images/logo.png" alt="Rise Events Photography Logo" class="contact-logo">
-            </div>
+    <!-- Portfolio Section -->
+<section id="portfolio" class="py-20 bg-gray-900">
+    <div class="container mx-auto px-6">
+        <div class="text-center mb-16 fade-in">
+            <h2 class="text-4xl md:text-5xl font-playfair font-bold mb-6 gradient-text">Our Portfolio</h2>
+            <p class="text-xl text-gray-300 max-w-2xl mx-auto">
+                A glimpse into the beautiful moments we've had the privilege to capture
+            </p>
         </div>
         
-        <div class="map">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d101703.41210540134!2d28.312499784959716!3d-25.710426439146957!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1e9559c0397b4b05%3A0x57a9adc3f0cfd01!2sRise%20Events%20Photography!5e1!3m2!1sen!2sza!4v1743338490179!5m2!1sen!2sza" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <!-- Portfolio Grid -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="image-overlay rounded-xl overflow-hidden hover-lift rotate-in stagger-1">
+                <img src="images/portfolio-1.jpg" alt="Wedding Photography" class="w-full rounded-xl object-contain bg-black">
+                <div class="overlay-content">
+                    <h3 class="text-xl font-bold">Elegant Weddings</h3>
+                    <p class="text-sm mt-2">Romantic moments captured forever</p>
+                </div>
+            </div>
+            
+            <div class="image-overlay rounded-xl overflow-hidden hover-lift rotate-in stagger-2">
+                <img src="images/portfolio-2.jpg" alt="Party Photography" class="w-full rounded-xl object-contain bg-black">
+                <div class="overlay-content">
+                    <h3 class="text-xl font-bold">Vibrant Parties</h3>
+                    <p class="text-sm mt-2">Joy and celebration in every frame</p>
+                </div>
+            </div>
+            
+            <div class="image-overlay rounded-xl overflow-hidden hover-lift rotate-in stagger-3">
+                <img src="images/portfolio-3.jpg" alt="Corporate Events" class="w-full rounded-xl object-contain bg-black">
+                <div class="overlay-content">
+                    <h3 class="text-xl font-bold">Corporate Excellence</h3>
+                    <p class="text-sm mt-2">Professional event documentation</p>
+                </div>
+            </div>
+            
+            <div class="image-overlay rounded-xl overflow-hidden hover-lift rotate-in stagger-4">
+                <img src="images/portfolio-4.jpg" alt="Event Photography" class="w-full rounded-xl object-contain bg-black">
+                <div class="overlay-content">
+                    <h3 class="text-xl font-bold">Special Events</h3>
+                    <p class="text-sm mt-2">Memorable occasions beautifully captured</p>
+                </div>
+            </div>
+            
+            <div class="image-overlay rounded-xl overflow-hidden hover-lift rotate-in stagger-5">
+                <img src="images/portfolio-5.jpg" alt="Celebration Photography" class="w-full rounded-xl object-contain bg-black">
+                <div class="overlay-content">
+                    <h3 class="text-xl font-bold">Celebrations</h3>
+                    <p class="text-sm mt-2">Life's precious moments preserved</p>
+                </div>
+            </div>
+            
+            <div class="image-overlay rounded-xl overflow-hidden hover-lift rotate-in stagger-6">
+                <img src="images/portfolio-6.jpg" alt="Artistic Photography" class="w-full rounded-xl object-contain bg-black">
+                <div class="overlay-content">
+                    <h3 class="text-xl font-bold">Artistic Vision</h3>
+                    <p class="text-sm mt-2">Creative storytelling through imagery</p>
+                </div>
+            </div>
+
+            <!-- Extra 3 Images -->
+            <div class="image-overlay rounded-xl overflow-hidden hover-lift rotate-in stagger-1">
+                <img src="images/portfolio-7.jpg" alt="Outdoor Weddings" class="w-full rounded-xl object-contain bg-black">
+                <div class="overlay-content">
+                    <h3 class="text-xl font-bold">Outdoor Weddings</h3>
+                    <p class="text-sm mt-2">Nature’s beauty meets love</p>
+                </div>
+            </div>
+
+            <div class="image-overlay rounded-xl overflow-hidden hover-lift rotate-in stagger-2">
+                <img src="images/portfolio-8.jpg" alt="Dance Floors" class="w-full rounded-xl object-contain bg-black">
+                <div class="overlay-content">
+                    <h3 class="text-xl font-bold">Dance Floors</h3>
+                    <p class="text-sm mt-2">Capturing the joy of the night</p>
+                </div>
+            </div>
+
+            <div class="image-overlay rounded-xl overflow-hidden hover-lift rotate-in stagger-3">
+                <img src="images/portfolio-9.jpg" alt="Portrait Photography" class="w-full rounded-xl object-contain bg-black">
+                <div class="overlay-content">
+                    <h3 class="text-xl font-bold">Portrait Photography</h3>
+                    <p class="text-sm mt-2">Capturing personality in every shot</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- View Full Gallery Button -->
+        <div class="text-center mt-12">
+            <button onclick="window.open('gallery.html', '_blank')" class="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 px-6 py-3 rounded-full text-lg font-semibold transition-all duration-300 hover-lift">
+                <i class="fas fa-images mr-2"></i>View Full Gallery
+            </button>
         </div>
     </div>
 </section>
-    
+
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-gray-800">
+        <div class="container mx-auto px-6">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="slide-left">
+                    <h2 class="text-4xl md:text-5xl font-playfair font-bold mb-6 gradient-text">About Rise Events Photography</h2>
+                    <p class="text-lg text-gray-300 mb-6">
+                        Based in Mamelodi, Pretoria, we are passionate photographers and videographers dedicated to capturing life's most precious moments. Our team travels across all provinces to ensure your special day is documented with the highest level of artistry and professionalism.
+                    </p>
+                    <p class="text-lg text-gray-300 mb-8">
+                        With years of experience in wedding photography, corporate events, and celebrations, we understand that every moment is unique and deserves to be preserved with care and creativity.
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <div class="bg-gray-900 px-4 py-2 rounded-full">
+                            <span class="text-amber-500 font-semibold">📍 Mamelodi, Pretoria</span>
+                        </div>
+                        <div class="bg-gray-900 px-4 py-2 rounded-full">
+                            <span class="text-amber-500 font-semibold">🌍 All Provinces</span>
+                        </div>
+                        <div class="bg-gray-900 px-4 py-2 rounded-full">
+                            <span class="text-amber-500 font-semibold">📸 Professional Quality</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="slide-right">
+                    <div class="relative">
+                        <img src="images/mashava.jpg" alt="Photography Equipment" class="rounded-xl shadow-2xl">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-gray-900">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16 fade-in">
+                <h2 class="text-4xl md:text-5xl font-playfair font-bold mb-6 gradient-text">Get In Touch</h2>
+                <p class="text-xl text-gray-300 max-w-2xl mx-auto">
+                    Ready to capture your special moments? Let's discuss your event and create something beautiful together.
+                </p>
+            </div>
+            
+            <div class="grid lg:grid-cols-2 gap-12">
+                <!-- Contact Info -->
+                <div class="fade-in">
+                    <h3 class="text-2xl font-playfair font-bold mb-8 text-amber-500">Contact Information</h3>
+                    <div class="space-y-6">
+                        <div class="flex items-center space-x-4">
+                            <div class="bg-amber-500 p-3 rounded-full">
+                                <svg class="w-6 h-6 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="text-gray-400">Phone</div>
+                                <div class="text-lg">081 337 8767</div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center space-x-4">
+                            <div class="bg-amber-500 p-3 rounded-full">
+                                <svg class="w-6 h-6 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="text-gray-400">Email</div>
+                                <div class="text-lg">bookings@riseeventsphotos.co.za</div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center space-x-4">
+                            <div class="bg-amber-500 p-3 rounded-full">
+                                <svg class="w-6 h-6 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="text-gray-400">Address</div>
+                                <div class="text-lg">8 F St, Mamelodi, Pretoria, 0122</div>
+                                <div class="text-sm text-gray-500">Serving all provinces</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Map -->
+                    <div class="mt-8">
+                        <h4 class="text-xl font-playfair font-bold mb-4 text-amber-500">Find Us</h4>
+                        <div class="rounded-xl overflow-hidden">
+                            <iframe 
+                                src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d203406.78393698158!2d28.394901!3d-25.71045!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1e9559c0397b4b05%3A0x57a9adc3f0cfd01!2sRise%20Events%20Photography!5e1!3m2!1sen!2sza!4v.!5m2!1sen!2sza"
+                                width="100%" 
+                                height="300" 
+                                style="border:0;" 
+                                allowfullscreen="" 
+                                loading="lazy" 
+                                referrerpolicy="no-referrer-when-downgrade"
+                                class="w-full">
+                            </iframe>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Booking Form -->
+                <div class="fade-in" style="animation-delay: 0.3s;">
+                    <form id="bookingForm" class="bg-gray-800 p-8 rounded-xl">
+                        <h3 class="text-2xl font-playfair font-bold mb-6 text-amber-500">Book Your Event</h3>
+                        
+                        <div class="grid md:grid-cols-2 gap-4 mb-4">
+                            <input type="text" id="firstName" placeholder="First Name" required class="bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 focus:border-amber-500 focus:outline-none transition-colors">
+                            <input type="text" id="lastName" placeholder="Last Name" required class="bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 focus:border-amber-500 focus:outline-none transition-colors">
+                        </div>
+                        
+                        <div class="grid md:grid-cols-2 gap-4 mb-4">
+                            <input type="email" id="email" placeholder="Email Address" required class="bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 focus:border-amber-500 focus:outline-none transition-colors">
+                            <input type="tel" id="phone" placeholder="Phone Number" required class="bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 focus:border-amber-500 focus:outline-none transition-colors">
+                        </div>
+                        
+                        <div class="grid md:grid-cols-2 gap-4 mb-4">
+                            <select id="eventType" required class="bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 focus:border-amber-500 focus:outline-none transition-colors">
+                                <option value="">Select Event Type</option>
+                                <option value="wedding">Wedding</option>
+                                <option value="party">Party/Celebration</option>
+                                <option value="corporate">Corporate Event</option>
+                                <option value="other">Other</option>
+                            </select>
+                            <input type="date" id="eventDate" required class="bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 focus:border-amber-500 focus:outline-none transition-colors">
+                        </div>
+                        
+                        <input type="text" id="location" placeholder="Event Location" required class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 mb-4 focus:border-amber-500 focus:outline-none transition-colors">
+                        
+                        <textarea id="message" placeholder="Tell us about your event..." rows="4" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 mb-6 focus:border-amber-500 focus:outline-none transition-colors resize-none"></textarea>
+                        
+                        <button type="submit" class="w-full bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 px-8 py-4 rounded-lg text-lg font-semibold transition-all duration-300 hover-lift">
+                            Send Booking Request via WhatsApp
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- Footer -->
-    <footer>
-        <div class="social-links">
-            <a href="https://www.instagram.com/riseevents?utm_source=qr&igsh=dzM4NTdodzZtaDZ0"><i class="fab fa-instagram"></i></a>
-            <a href="https://www.facebook.com/RiseEventsPhotography?rdid=Kt4X90j9mPlGJ2ec&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F16D2CJYLkm%2F#"><i class="fab fa-facebook"></i></a>
-            <a href="https://www.linkedin.com/company/rise-events-photography/posts/?feedView=all"><i class="fab fa-linkedin"></i></a>
-            <a href="https://wa.me/27813378767"><i class="fab fa-whatsapp"></i></a>
+    <footer class="bg-black py-16">
+        <div class="container mx-auto px-6">
+            <div class="grid lg:grid-cols-4 md:grid-cols-2 gap-8 mb-12">
+                <!-- Logo and Description -->
+                <div class="lg:col-span-1">
+                    <div class="text-2xl font-playfair font-bold gradient-text mb-4">Rise Events Photography</div>
+                    <p class="text-gray-400 mb-6">Capturing your special moments with artistic excellence across all provinces of South Africa.</p>
+                    <div class="flex flex-wrap gap-3">
+                        <a href="https://wa.me/27813378767" class="bg-gray-800 hover:bg-green-500 p-3 rounded-full transition-colors" title="WhatsApp">
+                            <i class="fab fa-whatsapp text-xl"></i>
+                        </a>
+                        <a href="mailto:bookings@riseeventsphotos.co.za" class="bg-gray-800 hover:bg-red-500 p-3 rounded-full transition-colors" title="Email">
+                            <i class="fas fa-envelope text-xl"></i>
+                        </a>
+                        <a href="tel:0813378767" class="bg-gray-800 hover:bg-blue-500 p-3 rounded-full transition-colors" title="Phone">
+                            <i class="fas fa-phone text-xl"></i>
+                        </a>
+                        <a href="https://www.facebook.com/RiseEventsPhotography?rdid=Kt4X90j9mPlGJ2ec&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F16D2CJYLkm%2F#" class="bg-gray-800 hover:bg-blue-600 p-3 rounded-full transition-colors" title="Facebook">
+                            <i class="fab fa-facebook text-xl"></i>
+                        </a>
+                        <a href="https://www.instagram.com/riseevents?utm_source=qr&igsh=dzM4NTdodzZtaDZ0" class="bg-gray-800 hover:bg-pink-500 p-3 rounded-full transition-colors" title="Instagram">
+                            <i class="fab fa-instagram text-xl"></i>
+                        </a>
+                        <a href="https://www.tiktok.com/@riseeventsphotography?is_from_webapp=1&sender_device=pc" class="bg-gray-800 hover:bg-black p-3 rounded-full transition-colors" title="TikTok">
+                            <i class="fab fa-tiktok text-xl"></i>
+                        </a>
+                        
+                        <a href="https://www.linkedin.com/company/rise-events-photography/posts/?feedView=all" class="bg-gray-800 hover:bg-blue-700 p-3 rounded-full transition-colors" title="LinkedIn">
+                            <i class="fab fa-linkedin text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Services -->
+                <div>
+                    <h3 class="text-xl font-playfair font-bold text-amber-500 mb-6">Our Services</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#services" class="text-gray-400 hover:text-amber-500 transition-colors">Wedding Photography</a></li>
+                        <li><a href="#services" class="text-gray-400 hover:text-amber-500 transition-colors">Event Videography</a></li>
+                        <li><a href="#services" class="text-gray-400 hover:text-amber-500 transition-colors">Cultural Documentation</a></li>
+                        <li><a href="#services" class="text-gray-400 hover:text-amber-500 transition-colors">Aerial Photography</a></li>
+                        <li><a href="#services" class="text-gray-400 hover:text-amber-500 transition-colors">Commercial Photography</a></li>
+                        <li><a href="#services" class="text-gray-400 hover:text-amber-500 transition-colors">Corporate Photography</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Quick Links -->
+                <div>
+                    <h3 class="text-xl font-playfair font-bold text-amber-500 mb-6">Quick Links</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#home" class="text-gray-400 hover:text-amber-500 transition-colors">Home</a></li>
+                        <li><a href="#services" class="text-gray-400 hover:text-amber-500 transition-colors">Services</a></li>
+                        <li><a href="#portfolio" class="text-gray-400 hover:text-amber-500 transition-colors">Portfolio</a></li>
+                        <li><a href="#about" class="text-gray-400 hover:text-amber-500 transition-colors">About Us</a></li>
+                        <li><a href="#contact" class="text-gray-400 hover:text-amber-500 transition-colors">Contact</a></li>
+                        <li><a href="#contact" class="text-gray-400 hover:text-amber-500 transition-colors">Book Now</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Contact Info -->
+                <div>
+                    <h3 class="text-xl font-playfair font-bold text-amber-500 mb-6">Contact Info</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-start space-x-3">
+                            <i class="fas fa-map-marker-alt text-amber-500 mt-1"></i>
+                            <div>
+                                <div class="text-gray-300">8 F St, Mamelodi</div>
+                                <div class="text-gray-300">Pretoria, 0122</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-phone text-amber-500"></i>
+                            <div class="text-gray-300">081 337 8767</div>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-envelope text-amber-500"></i>
+                            <div class="text-gray-300">bookings@riseeventsphotos.co.za</div>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-globe text-amber-500"></i>
+                            <div class="text-gray-300">Serving All Provinces</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Bottom Bar -->
+            <div class="border-t border-gray-800 pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-gray-500 mb-4 md:mb-0">&copy; 2024 Rise Events Photography. All rights reserved.</p>
+                    <div class="flex space-x-6">
+                        <a href="#" class="text-gray-500 hover:text-amber-500 transition-colors text-sm">Privacy Policy</a>
+                        <a href="#" class="text-gray-500 hover:text-amber-500 transition-colors text-sm">Terms of Service</a>
+                        <a href="#contact" class="text-gray-500 hover:text-amber-500 transition-colors text-sm">Book Consultation</a>
+                    </div>
+                </div>
+            </div>
         </div>
-        <p>&copy; 2023 Rise Events Photography. All rights reserved | By <a href="https://www.valoyitech.co.za" target="_blank">Hector Baloyi</a></p>
     </footer>
 
+    <script>
+        // Loading animation
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                document.getElementById('loader').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('loader').style.display = 'none';
+                }, 500);
+            }, 2000);
+        });
 
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script src="script.js"></script>
-</body>
+        // Smooth scrolling
+        function scrollToSection(sectionId) {
+            document.getElementById(sectionId).scrollIntoView({
+                behavior: 'smooth'
+            });
+        }
+
+
+
+        // Navbar background on scroll
+        function handleNavbarScroll() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('bg-gray-900');
+                navbar.classList.remove('bg-gray-900/95');
+            } else {
+                navbar.classList.remove('bg-gray-900');
+                navbar.classList.add('bg-gray-900/95');
+            }
+        }
+
+        // Form submission to WhatsApp
+        document.getElementById('bookingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const eventType = document.getElementById('eventType').value;
+            const eventDate = document.getElementById('eventDate').value;
+            const location = document.getElementById('location').value;
+            const message = document.getElementById('message').value;
+            
+            const whatsappMessage = `*New Booking Request - Rise Events Photography*
+
+*Client Details:*
+Name: ${firstName} ${lastName}
+Email: ${email}
+Phone: ${phone}
+
+*Event Details:*
+Type: ${eventType}
+Date: ${eventDate}
+Location: ${location}
+
+*Message:*
+${message}
+
+Please contact me to discuss this booking opportunity.`;
+
+            const whatsappUrl = `https://wa.me/27813378767?text=${encodeURIComponent(whatsappMessage)}`;
+            window.open(whatsappUrl, '_blank');
+        });
+
+        // Hero Slideshow
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.hero-slide');
+        const contentSlides = document.querySelectorAll('.hero-content-slide');
+        const indicators = document.querySelectorAll('.slide-indicator');
+        
+        function showSlide(index) {
+            // Hide all slides
+            slides.forEach(slide => slide.classList.remove('active'));
+            contentSlides.forEach(slide => slide.classList.remove('active'));
+            indicators.forEach(indicator => indicator.classList.remove('active'));
+            
+            // Show current slide
+            slides[index].classList.add('active');
+            contentSlides[index].classList.add('active');
+            indicators[index].classList.add('active');
+        }
+        
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        }
+        
+        function goToSlide(index) {
+            currentSlide = index;
+            showSlide(currentSlide);
+        }
+        
+        // Auto-advance slides
+        setInterval(nextSlide, 5000);
+        
+        // Mobile menu toggle
+        function toggleMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            const menuIcon = document.getElementById('menuIcon');
+            
+            if (mobileMenu.classList.contains('translate-x-full')) {
+                mobileMenu.classList.remove('translate-x-full');
+                mobileMenu.classList.add('translate-x-0');
+                document.body.style.overflow = 'hidden';
+            } else {
+                mobileMenu.classList.add('translate-x-full');
+                mobileMenu.classList.remove('translate-x-0');
+                document.body.style.overflow = 'auto';
+            }
+        }
+        
+        // Enhanced scroll animations
+        function handleScrollAnimations() {
+            const elements = document.querySelectorAll('.fade-in, .slide-left, .slide-right, .scale-in, .rotate-in');
+            elements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 100;
+                
+                if (elementTop < window.innerHeight - elementVisible) {
+                    element.classList.add('visible');
+                }
+            });
+        }
+
+        // Event listeners
+        window.addEventListener('scroll', handleScrollAnimations);
+        window.addEventListener('scroll', handleNavbarScroll);
+        
+        // Initial call to handle elements already in view
+        handleScrollAnimations();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97179943b23573e0',t:'MTc1NTU4NDk4OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>

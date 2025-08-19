@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery | Rise Events Photography – Wedding & Event Photography in South Africa</title>
+
+    <!-- Meta Tags for SEO -->
+    <meta name="description" content="Explore the photo and video gallery of Rise Events Photography. Relive weddings, events, and cultural celebrations across South Africa.">
+    <meta name="keywords" content="Rise Events Photography, Photography Gallery, Wedding Photos, Event Photography, Cultural Photography, Videography, South Africa">
+    <meta name="author" content="Rise Events Photography">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:title" content="Gallery | Rise Events Photography – Wedding & Event Photography in South Africa">
+    <meta property="og:description" content="View our curated photo and video gallery capturing weddings, events, and cultural celebrations across South Africa.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://riseeventsphotos.co.za/gallery.html">
+    <meta property="og:image" content="images/gallery-preview.jpg">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Gallery | Rise Events Photography – Wedding & Event Photography in South Africa">
+    <meta name="twitter:description" content="View our curated photo and video gallery capturing weddings, events, and cultural celebrations across South Africa.">
+    <meta name="twitter:image" content="images/gallery-preview.jpg">
+
+    <!-- Favicon -->
+    <link rel="icon" href="images/logo.png" type="image/png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .font-playfair { font-family: 'Playfair Display', serif; }
+        .font-inter { font-family: 'Inter', sans-serif; }
+        
+        /* Prevent horizontal scroll */
+        html, body {
+            overflow-x: hidden;
+        }
+        
+        /* Loading Animation */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1f2937, #111827);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease-out;
+        }
+        
+        .camera-icon {
+            width: 80px;
+            height: 80px;
+            border: 4px solid #f59e0b;
+            border-radius: 12px;
+            position: relative;
+            animation: pulse 2s infinite;
+        }
+        
+        .camera-icon::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            border: 3px solid #f59e0b;
+            border-radius: 50%;
+            animation: zoom 1.5s infinite alternate;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        @keyframes zoom {
+            0% { transform: translate(-50%, -50%) scale(1); }
+            100% { transform: translate(-50%, -50%) scale(1.2); }
+        }
+        
+        /* Gallery Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .scale-in {
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 0.6s ease;
+        }
+        
+        .scale-in.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        /* Gallery Item Hover Effects */
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+        
+        .gallery-item img {
+            transition: transform 0.5s ease;
+        }
+        
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+        
+        .gallery-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(245, 158, 11, 0.9), rgba(217, 119, 6, 0.9));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+        
+        /* Lightbox Styles */
+        .lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+        
+        .lightbox.active {
+            display: flex;
+        }
+        
+        .lightbox-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            animation: lightboxZoom 0.3s ease;
+        }
+        
+        .lightbox img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+        
+        .lightbox-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        
+        .lightbox-close:hover {
+            color: #f59e0b;
+        }
+        
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px 15px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        
+        .lightbox-nav:hover {
+            background: rgba(245, 158, 11, 0.8);
+        }
+        
+        .lightbox-prev {
+            left: -60px;
+        }
+        
+        .lightbox-next {
+            right: -60px;
+        }
+        
+        @keyframes lightboxZoom {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        
+        /* Filter Buttons */
+        .filter-btn {
+            padding: 10px 20px;
+            border: 2px solid #f59e0b;
+            background: transparent;
+            color: #f59e0b;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: #f59e0b;
+            color: #1f2937;
+        }
+        
+        /* Masonry Layout */
+        .masonry-grid {
+            column-count: 1;
+            column-gap: 1.5rem;
+        }
+        
+        @media (min-width: 640px) {
+            .masonry-grid {
+                column-count: 2;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .masonry-grid {
+                column-count: 3;
+            }
+        }
+        
+        @media (min-width: 1280px) {
+            .masonry-grid {
+                column-count: 4;
+            }
+        }
+        
+        .masonry-item {
+            break-inside: avoid;
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Gradient text */
+        .gradient-text {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #1f2937;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #f59e0b;
+            border-radius: 4px;
+        }
+        
+        /* Stagger animations */
+        .stagger-1 { animation-delay: 0.1s; }
+        .stagger-2 { animation-delay: 0.2s; }
+        .stagger-3 { animation-delay: 0.3s; }
+        .stagger-4 { animation-delay: 0.4s; }
+        .stagger-5 { animation-delay: 0.5s; }
+        .stagger-6 { animation-delay: 0.6s; }
+    </style>
+</head>
+<body class="bg-gray-900 text-white font-inter">
+    <!-- Loading Screen -->
+    <div id="loader" class="loader">
+    <div class="text-center">
+        <img src="images/logo.png" alt="Rise Events Photography" class="camera-icon mx-auto mb-4">
+        <div class="text-amber-500 text-xl font-playfair">Rise Events Photography</div>
+        <div class="text-gray-400 text-sm mt-2">Loading your visual journey...</div>
+    </div>
+</div>
+
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-gray-900/95 backdrop-blur-sm z-50 transition-all duration-300" id="navbar">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <div class="text-2xl font-playfair font-bold gradient-text">Rise Events Photography</div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="index.html" class="hover:text-amber-500 transition-colors">Home</a>
+                    <a href="index.html#services" class="hover:text-amber-500 transition-colors">Services</a>
+                    <a href="#" class="text-amber-500">Gallery</a>
+                    <a href="index.html#about" class="hover:text-amber-500 transition-colors">About</a>
+                    <a href="index.html#contact" class="hover:text-amber-500 transition-colors">Contact</a>
+                </div>
+                <button class="md:hidden text-amber-500" onclick="toggleMenu()" id="menuToggle">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="fixed inset-0 z-50 transform translate-x-full transition-transform duration-300 ease-in-out md:hidden">
+        <div class="absolute inset-0 bg-black bg-opacity-50" onclick="toggleMenu()"></div>
+        <div class="absolute right-0 top-0 h-full w-80 bg-gray-900 shadow-xl">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-8">
+                    <div class="text-xl font-playfair font-bold gradient-text">Menu</div>
+                    <button onclick="toggleMenu()" class="text-amber-500">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <nav class="space-y-6">
+                    <a href="index.html" onclick="toggleMenu()" class="block text-lg text-white hover:text-amber-500 transition-colors py-3 border-b border-gray-700">
+                        <i class="fas fa-home mr-3"></i>Home
+                    </a>
+                    <a href="index.html#services" onclick="toggleMenu()" class="block text-lg text-white hover:text-amber-500 transition-colors py-3 border-b border-gray-700">
+                        <i class="fas fa-camera mr-3"></i>Services
+                    </a>
+                    <a href="#" onclick="toggleMenu()" class="block text-lg text-amber-500 py-3 border-b border-gray-700">
+                        <i class="fas fa-images mr-3"></i>Gallery
+                    </a>
+                    <a href="index.html#about" onclick="toggleMenu()" class="block text-lg text-white hover:text-amber-500 transition-colors py-3 border-b border-gray-700">
+                        <i class="fas fa-info-circle mr-3"></i>About
+                    </a>
+                    <a href="index.html#contact" onclick="toggleMenu()" class="block text-lg text-white hover:text-amber-500 transition-colors py-3 border-b border-gray-700">
+                        <i class="fas fa-envelope mr-3"></i>Contact
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="pt-32 pb-16 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
+        <div class="container mx-auto px-6 text-center">
+            <div class="fade-in">
+                <h1 class="text-5xl md:text-6xl font-playfair font-bold mb-6 gradient-text">
+                    Our Gallery
+                </h1>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
+                    Explore our collection of captured moments - from intimate weddings to grand celebrations, 
+                    each image tells a unique story of love, joy, and unforgettable memories.
+                </p>
+                <div class="flex items-center justify-center space-x-4 text-gray-400">
+                    <div class="flex items-center">
+                        <i class="fas fa-camera mr-2 text-amber-500"></i>
+                        <span>500+ Events</span>
+                    </div>
+                    <div class="w-1 h-1 bg-gray-500 rounded-full"></div>
+                    <div class="flex items-center">
+                        <i class="fas fa-heart mr-2 text-amber-500"></i>
+                        <span>Countless Memories</span>
+                    </div>
+                    <div class="w-1 h-1 bg-gray-500 rounded-full"></div>
+                    <div class="flex items-center">
+                        <i class="fas fa-star mr-2 text-amber-500"></i>
+                        <span>Premium Quality</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filter Section -->
+    <section class="py-8 bg-gray-800">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-wrap justify-center gap-4 fade-in">
+                <button class="filter-btn active" data-filter="all">All Photos</button>
+                <button class="filter-btn" data-filter="weddings">Weddings</button>
+                <button class="filter-btn" data-filter="parties">Parties</button>
+                <button class="filter-btn" data-filter="corporate">Corporate</button>
+                <button class="filter-btn" data-filter="cultural">Cultural</button>
+                <button class="filter-btn" data-filter="portraits">Portraits</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section class="py-16 bg-gray-900">
+        <div class="container mx-auto px-6">
+            <div class="masonry-grid" id="galleryGrid">
+                <!-- Wedding Photos -->
+                <div class="masonry-item gallery-item scale-in stagger-1" data-category="weddings" data-image="images/portfolio-1.jpg">
+                    <img src="images/portfolio-1.jpg" alt="Elegant Wedding Ceremony" class="w-full h-auto">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Elegant Wedding</h3>
+                        <p class="text-sm">Beautiful ceremony moments</p>
+                        <i class="fas fa-search-plus text-2xl mt-4"></i>
+                    </div>
+                </div>
+
+                <div class="masonry-item gallery-item scale-in stagger-2" data-category="weddings" data-image="images/portfolio-5.jpg">
+                    <img src="images/portfolio-5.jpg" alt="Wedding Reception" class="w-full h-auto">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Reception Joy</h3>
+                        <p class="text-sm">Celebration and dancing</p>
+                        <i class="fas fa-search-plus text-2xl mt-4"></i>
+                    </div>
+                </div>
+
+                <div class="masonry-item gallery-item scale-in stagger-3" data-category="weddings" data-image="images/portfolio-7.jpg">
+                    <img src="images/portfolio-7.jpg" alt="Bridal Portrait" class="w-full h-auto">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Bridal Beauty</h3>
+                        <p class="text-sm">Stunning portrait session</p>
+                        <i class="fas fa-search-plus text-2xl mt-4"></i>
+                    </div>
+                </div>
+
+                <!-- Party Photos -->
+                <div class="masonry-item gallery-item scale-in stagger-4" data-category="parties" data-image="images/portfolio-2.jpg">
+                    <img src="images/portfolio-2.jpg" alt="Birthday Celebration" class="w-full h-auto">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Birthday Bash</h3>
+                        <p class="text-sm">Vibrant celebration moments</p>
+                        <i class="fas fa-search-plus text-2xl mt-4"></i>
+                    </div>
+                </div>
+
+                <div class="masonry-item gallery-item scale-in stagger-5" data-category="parties" data-image="images/party3.jpg">
+                    <img src="images/party3.jpg" alt="Party Atmosphere" class="w-full h-auto">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Party Vibes</h3>
+                        <p class="text-sm">Energy and excitement</p>
+                        <i class="fas fa-search-plus text-2xl mt-4"></i>
+                    </div>
+                </div>
+
+                <!-- Corporate Photos -->
+                <div class="masonry-item gallery-item scale-in stagger-6" data-category="corporate" data-image="images/lan11.jpg">
+                    <img src="images/lan11.jpg" alt="Corporate Event" class="w-full h-auto">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Corporate Excellence</h3>
+                        <p class="text-sm">Professional networking</p>
+                        <i class="fas fa-search-plus text-2xl mt-4"></i>
+                    </div>
+                </div>
+
+                <div class="masonry-item gallery-item scale-in stagger-1" data-category="corporate" data-image="images/portfolio-3.jpg">
+                    <img src="images/portfolio-3.jpg" alt="Business Conference" class="w-full h-auto">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Conference</h3>
+                        <p class="text-sm">Business presentations</p>
+                        <i class="fas fa-search-plus text-2xl mt-4"></i>
+                    </div>
+                </div>
+
+                <!-- Cultural Photos -->
+                <div class="masonry-item gallery-item scale-in stagger-2" data-category="cultural" data-image="images/lan3.jpg">
+                    <img src="images/lan3.jpg" alt="Cultural Celebration" class="w-full h-auto">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Cultural Heritage</h3>
+                        <p class="text-sm">Traditional celebrations</p>
+                        <i class="fas fa-search-plus text-2xl mt-4"></i>
+                    </div>
+                </div>
+
+                <div class="masonry-item gallery-item scale-in stagger-3" data-category="cultural" data-image="images/lan6.jpg">
+                    <img src="images/lan6.jpg" alt="Traditional Dance" class="w-full h-auto">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Traditional Dance</h3>
+                        <p class="text-sm">Cultural performances</p>
+                        <i class="fas fa-search-plus text-2xl mt-4"></i>
+                    </div>
+                </div>
+
+                <!-- Portrait Photos -->
+                <div class="masonry-item gallery-item scale-in stagger-4" data-category="portraits" data-image="images/pot1.jpg">
+                    <img src="images/pot1.jpg" alt="Professional Portrait" class="w-full h-auto">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Professional Portrait</h3>
+                        <p class="text-sm">Executive headshots</p>
+                        <i class="fas fa-search-plus text-2xl mt-4"></i>
+                    </div>
+                </div>
+
+                <div class="masonry-item gallery-item scale-in stagger-5" data-category="portraits" data-image="images/pot2.jpg">
+                    <img src="images/pot2.jpg" alt="Creative Portrait" class="w-full h-auto">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Creative Portrait</h3>
+                        <p class="text-sm">Artistic expression</p>
+                        <i class="fas fa-search-plus text-2xl mt-4"></i>
+                    </div>
+                </div>
+
+                <!-- Additional Mixed Photos -->
+                <div class="masonry-item gallery-item scale-in stagger-6" data-category="weddings" data-image="images/lan7.jpg">
+                    <img src="images/lan7.jpg" alt="Wedding Details" class="w-full h-auto">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Wedding Details</h3>
+                        <p class="text-sm">Beautiful arrangements</p>
+                        <i class="fas fa-search-plus text-2xl mt-4"></i>
+                    </div>
+                </div>
+
+                <div class="masonry-item gallery-item scale-in stagger-1" data-category="parties" data-image="images/hero44 (1).jpg">
+                    <img src="images/hero44 (1).jpg" alt="Concert Event" class="w-full h-auto">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Live Performance</h3>
+                        <p class="text-sm">Music and entertainment</p>
+                        <i class="fas fa-search-plus text-2xl mt-4"></i>
+                    </div>
+                </div>
+
+                <div class="masonry-item gallery-item scale-in stagger-2" data-category="corporate" data-image="images/hero44 (3).jpg">
+                    <img src="images/hero44 (3).jpg" alt="Team Building" class="w-full h-auto">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Team Building</h3>
+                        <p class="text-sm">Corporate activities</p>
+                        <i class="fas fa-search-plus text-2xl mt-4"></i>
+                    </div>
+                </div>
+
+                <div class="masonry-item gallery-item scale-in stagger-3" data-category="cultural" data-image="images/pot1.jpg">
+                    <img src="images/pot1.jpg" alt="Festival Celebration" class="w-full h-auto">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Festival Joy</h3>
+                        <p class="text-sm">Community celebrations</p>
+                        <i class="fas fa-search-plus text-2xl mt-4"></i>
+                    </div>
+                </div>
+
+                <div class="masonry-item gallery-item scale-in stagger-4" data-category="portraits" data-image="images/lan1.jpg">
+                    <img src="images/lan1.jpg" alt="Business Portrait" class="w-full h-auto">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Business Portrait</h3>
+                        <p class="text-sm">Professional imagery</p>
+                        <i class="fas fa-search-plus text-2xl mt-4"></i>
+                    </div>
+                </div>
+
+                <div class="masonry-item gallery-item scale-in stagger-5" data-category="weddings" data-image="images/lan2.jpg">
+                    <img src="images/lan2.jpg" alt="Wedding Couple" class="w-full h-auto">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Love Story</h3>
+                        <p class="text-sm">Romantic moments</p>
+                        <i class="fas fa-search-plus text-2xl mt-4"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Load More Button -->
+            <div class="text-center mt-12 fade-in">
+                <button id="loadMoreBtn" class="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300 transform hover:scale-105">
+                    <i class="fas fa-plus mr-2"></i>Load More Photos
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lightbox -->
+    <div id="lightbox" class="lightbox">
+        <div class="lightbox-content">
+            <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+            <span class="lightbox-nav lightbox-prev" onclick="prevImage()">&#10094;</span>
+            <span class="lightbox-nav lightbox-next" onclick="nextImage()">&#10095;</span>
+            <img id="lightboxImage" src="" alt="">
+        </div>
+    </div>
+
+    <!-- Contact CTA Section -->
+    <section class="py-20 bg-gradient-to-r from-amber-500 to-orange-600">
+        <div class="container mx-auto px-6 text-center">
+            <div class="fade-in">
+                <h2 class="text-4xl md:text-5xl font-playfair font-bold mb-6 text-gray-900">
+                    Ready to Create Your Story?
+                </h2>
+                <p class="text-xl text-gray-800 mb-8 max-w-2xl mx-auto">
+                    Let us capture your special moments with the same passion and artistry you see in our gallery.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="index.html#contact" class="bg-gray-900 hover:bg-gray-800 text-white px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300 transform hover:scale-105">
+                        Book Your Event
+                    </a>
+                    <a href="https://wa.me/27813378767" class="border-2 border-gray-900 hover:bg-gray-900 hover:text-white text-gray-900 px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300">
+                        <i class="fab fa-whatsapp mr-2"></i>WhatsApp Us
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black py-16">
+        <div class="container mx-auto px-6">
+            <div class="grid lg:grid-cols-4 md:grid-cols-2 gap-8 mb-12">
+                <div class="lg:col-span-1">
+                    <div class="text-2xl font-playfair font-bold gradient-text mb-4">Rise Events Photography</div>
+                    <p class="text-gray-400 mb-6">Capturing your special moments with artistic excellence across all provinces of South Africa.</p>
+                    <div class="flex flex-wrap gap-3">
+                        <a href="https://wa.me/27813378767" class="bg-gray-800 hover:bg-green-500 p-3 rounded-full transition-colors" title="WhatsApp">
+                            <i class="fab fa-whatsapp text-xl"></i>
+                        </a>
+                        <a href="mailto:bookings@riseeventsphotos.co.za" class="bg-gray-800 hover:bg-red-500 p-3 rounded-full transition-colors" title="Email">
+                            <i class="fas fa-envelope text-xl"></i>
+                        </a>
+                        <a href="tel:0813378767" class="bg-gray-800 hover:bg-blue-500 p-3 rounded-full transition-colors" title="Phone">
+                            <i class="fas fa-phone text-xl"></i>
+                        </a>
+                        <a href="https://www.facebook.com/RiseEventsPhotography?rdid=Kt4X90j9mPlGJ2ec&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F16D2CJYLkm%2F#" class="bg-gray-800 hover:bg-blue-600 p-3 rounded-full transition-colors" title="Facebook">
+                            <i class="fab fa-facebook text-xl"></i>
+                        </a>
+                        <a href="https://www.instagram.com/riseevents?utm_source=qr&igsh=dzM4NTdodzZtaDZ0" class="bg-gray-800 hover:bg-pink-500 p-3 rounded-full transition-colors" title="Instagram">
+                            <i class="fab fa-instagram text-xl"></i>
+                        </a>
+                        <a href="https://www.tiktok.com/@riseeventsphotography?is_from_webapp=1&sender_device=pc" class="bg-gray-800 hover:bg-black p-3 rounded-full transition-colors" title="TikTok">
+                            <i class="fab fa-tiktok text-xl"></i>
+                        </a>
+                        
+                        <a href="https://www.linkedin.com/company/rise-events-photography/posts/?feedView=all" class="bg-gray-800 hover:bg-blue-700 p-3 rounded-full transition-colors" title="LinkedIn">
+                            <i class="fab fa-linkedin text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-playfair font-bold text-amber-500 mb-6">Quick Links</h3>
+                    <ul class="space-y-3">
+                        <li><a href="index.html" class="text-gray-400 hover:text-amber-500 transition-colors">Home</a></li>
+                        <li><a href="index.html#services" class="text-gray-400 hover:text-amber-500 transition-colors">Services</a></li>
+                        <li><a href="#" class="text-amber-500">Gallery</a></li>
+                        <li><a href="index.html#about" class="text-gray-400 hover:text-amber-500 transition-colors">About Us</a></li>
+                        <li><a href="index.html#contact" class="text-gray-400 hover:text-amber-500 transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-playfair font-bold text-amber-500 mb-6">Gallery Categories</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-amber-500 transition-colors">Weddings</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-amber-500 transition-colors">Parties & Events</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-amber-500 transition-colors">Corporate</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-amber-500 transition-colors">Cultural Events</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-amber-500 transition-colors">Portraits</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-playfair font-bold text-amber-500 mb-6">Contact Info</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-start space-x-3">
+                            <i class="fas fa-map-marker-alt text-amber-500 mt-1"></i>
+                            <div>
+                                <div class="text-gray-300">8 F St, Mamelodi</div>
+                                <div class="text-gray-300">Pretoria, 0122</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-phone text-amber-500"></i>
+                            <div class="text-gray-300">081 337 8767</div>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-envelope text-amber-500"></i>
+                            <div class="text-gray-300">bookings@riseeventsphotos.co.za</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-gray-500 mb-4 md:mb-0">&copy; 2024 Rise Events Photography. All rights reserved.</p>
+                    <div class="flex space-x-6">
+                        <a href="#" class="text-gray-500 hover:text-amber-500 transition-colors text-sm">Privacy Policy</a>
+                        <a href="#" class="text-gray-500 hover:text-amber-500 transition-colors text-sm">Terms of Service</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Loading animation
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                document.getElementById('loader').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('loader').style.display = 'none';
+                }, 500);
+            }, 1500);
+        });
+
+        // Mobile menu toggle
+        function toggleMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            
+            if (mobileMenu.classList.contains('translate-x-full')) {
+                mobileMenu.classList.remove('translate-x-full');
+                mobileMenu.classList.add('translate-x-0');
+                document.body.style.overflow = 'hidden';
+            } else {
+                mobileMenu.classList.add('translate-x-full');
+                mobileMenu.classList.remove('translate-x-0');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // Scroll animations
+        function handleScrollAnimations() {
+            const elements = document.querySelectorAll('.fade-in, .scale-in');
+            elements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 100;
+                
+                if (elementTop < window.innerHeight - elementVisible) {
+                    element.classList.add('visible');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', handleScrollAnimations);
+        handleScrollAnimations();
+
+        // Filter functionality
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const galleryItems = document.querySelectorAll('.gallery-item');
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                // Add active class to clicked button
+                button.classList.add('active');
+
+                const filter = button.getAttribute('data-filter');
+
+                galleryItems.forEach(item => {
+                    if (filter === 'all' || item.getAttribute('data-category') === filter) {
+                        item.style.display = 'block';
+                        setTimeout(() => {
+                            item.style.opacity = '1';
+                            item.style.transform = 'scale(1)';
+                        }, 100);
+                    } else {
+                        item.style.opacity = '0';
+                        item.style.transform = 'scale(0.8)';
+                        setTimeout(() => {
+                            item.style.display = 'none';
+                        }, 300);
+                    }
+                });
+            });
+        });
+
+        // Lightbox functionality
+        let currentImageIndex = 0;
+        let visibleImages = [];
+
+        function updateVisibleImages() {
+            visibleImages = Array.from(document.querySelectorAll('.gallery-item')).filter(item => 
+                item.style.display !== 'none'
+            );
+        }
+
+        function openLightbox(imageSrc, index) {
+            updateVisibleImages();
+            currentImageIndex = index;
+            document.getElementById('lightboxImage').src = imageSrc;
+            document.getElementById('lightbox').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function nextImage() {
+            currentImageIndex = (currentImageIndex + 1) % visibleImages.length;
+            const nextImageSrc = visibleImages[currentImageIndex].getAttribute('data-image');
+            document.getElementById('lightboxImage').src = nextImageSrc;
+        }
+
+        function prevImage() {
+            currentImageIndex = (currentImageIndex - 1 + visibleImages.length) % visibleImages.length;
+            const prevImageSrc = visibleImages[currentImageIndex].getAttribute('data-image');
+            document.getElementById('lightboxImage').src = prevImageSrc;
+        }
+
+        // Add click events to gallery items
+        galleryItems.forEach((item, index) => {
+            item.addEventListener('click', () => {
+                const imageSrc = item.getAttribute('data-image');
+                openLightbox(imageSrc, index);
+            });
+        });
+
+        // Close lightbox on background click
+        document.getElementById('lightbox').addEventListener('click', (e) => {
+            if (e.target.id === 'lightbox') {
+                closeLightbox();
+            }
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (document.getElementById('lightbox').classList.contains('active')) {
+                if (e.key === 'Escape') {
+                    closeLightbox();
+                } else if (e.key === 'ArrowRight') {
+                    nextImage();
+                } else if (e.key === 'ArrowLeft') {
+                    prevImage();
+                }
+            }
+        });
+
+        // Load more functionality (demo)
+        document.getElementById('loadMoreBtn').addEventListener('click', function() {
+            this.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Loading...';
+            
+            setTimeout(() => {
+                this.innerHTML = '<i class="fas fa-check mr-2"></i>All Photos Loaded';
+                this.disabled = true;
+                this.classList.add('opacity-50', 'cursor-not-allowed');
+            }, 2000);
+        });
+
+        // Initialize visible images
+        updateVisibleImages();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97179f65e312df1a',t:'MTc1NTU4NTI0MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
